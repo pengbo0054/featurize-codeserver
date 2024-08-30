@@ -105,8 +105,8 @@ class Vscode(App):
         
         os.environ['STANDALONE_INSTALL_PREFIX'] = self.cfg.source_directory
         os.environ['VERSION'] = '4.92.2'
-        self.execute_command("curl -fsSL https://code-server.dev/install.sh | bash", self.cfg.source_directory)
-        
+        self.execute_command("wget https://code-server.dev/install.sh", self.cfg.source_directory)
+        self.execute_command("bash install.sh", self.cfg.source_directory)
         file_path = os.path.join(self.cfg.source_directory, 'config.yaml')
         directory = os.path.dirname(file_path)
         print(f'================================{directory}================================')
