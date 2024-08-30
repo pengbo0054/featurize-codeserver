@@ -100,7 +100,8 @@ class Vscode(App):
         # NOTE：所有命令，或是其他的根路径相关的参数等都建议使用绝对路径
         # TODO：在这里写安装逻辑，一般都会调用 execute_command 来执行
         # self.execute_command("{command to be executed}")
-        
+        self.logger.info("version 1.0.4")
+
         self.cfg.source_directory = install_location
         
         os.environ['STANDALONE_INSTALL_PREFIX'] = self.cfg.source_directory
