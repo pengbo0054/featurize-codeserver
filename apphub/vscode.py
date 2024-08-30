@@ -123,7 +123,7 @@ class Vscode(App):
 
         shutil.copy(filepath, '/home/featurize/.config/code-server/config.yaml')
         #self.execute_command("sudo rm /home/featurize/.config/code-server/config.yaml")
-        #self.execute_command('code-server --install-extension ms-python.python')
+        self.execute_command('code-server --install-extension ms-python.python')
         #self.cfg.source_directory = install_location
         #self.execute_command(
         #    f"curl -fOL https://github.com/coder/code-server/releases/download/v4.92.2/code-server_4.92.2_amd64.deb",
