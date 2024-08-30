@@ -1,5 +1,5 @@
 import os
-
+import shutil
 import gradio as gr
 
 from apphub.app import App, AppOption
@@ -108,19 +108,21 @@ class Vscode(App):
         self.execute_command("wget https://raw.githubusercontent.com/cdr/code-server/main/install.sh", self.cfg.source_directory)
         self.execute_command("bash install.sh", self.cfg.source_directory)
         
-        file_path = os.path.join(self.cfg.source_directory, 'config.yaml')
+        filepath = os.path.join(self.cfg.source_directory, 'config.yaml')
         def append_line_to_file(file_path, line, mode='w'):
             with open(file_path, mode, encoding='utf-8') as file:
                 file.write(line + '\n')
         
-        append_line_to_file(file_path, f'bind-addr: 0.0.0.0:{self.port}')
-        append_line_to_file(file_path, f'auth: none', 'a')
-        append_line_to_file(file_path, f'cert: false', 'a')
+        append_line_to_file(filepath, f'bind-addr: 0.0.0.0:{self.port}')
+        append_line_to_file(filepath, f'auth: none', 'a')
+        append_line_to_file(filepath, f'cert: false', 'a')
+        
+        if os.path.exists('/home/featurize/.config/code-server/config.yaml'):
+            os.remove('/home/featurize/.config/code-server/config.yaml')
 
-
-        self.execute_command("sudo rm /home/featurize/.config/code-server/config.yaml")
-        self.execute_command("cp config.yaml /home/featurize/.config/code-server/config.yaml", self.cfg.source_directory)
-        self.execute_command('code-server --install-extension ms-python.python')
+        shutil.copy(os.path.join(self.cfg.source_directory, 'config.yaml'), '/home/featurize/.config/code-server/config.yaml')
+        #self.execute_command("sudo rm /home/featurize/.config/code-server/config.yaml")
+        #self.execute_command('code-server --install-extension ms-python.python')
         #self.cfg.source_directory = install_location
         #self.execute_command(
         #    f"curl -fOL https://github.com/coder/code-server/releases/download/v4.92.2/code-server_4.92.2_amd64.deb",
