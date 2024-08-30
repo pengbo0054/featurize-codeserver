@@ -121,7 +121,7 @@ class Vscode(App):
         if os.path.exists('/home/featurize/.config/code-server/config.yaml'):
             os.remove('/home/featurize/.config/code-server/config.yaml')
 
-        shutil.copy(os.path.join(self.cfg.source_directory, 'config.yaml'), '/home/featurize/.config/code-server/config.yaml')
+        shutil.copy(filepath, '/home/featurize/.config/code-server/config.yaml')
         #self.execute_command("sudo rm /home/featurize/.config/code-server/config.yaml")
         #self.execute_command('code-server --install-extension ms-python.python')
         #self.cfg.source_directory = install_location
