@@ -105,17 +105,13 @@ class Vscode(App):
         
         os.environ['STANDALONE_INSTALL_PREFIX'] = self.cfg.source_directory
         os.environ['VERSION'] = '4.92.2'
-        self.execute_command("wget https://code-server.dev/install.sh", self.cfg.source_directory)
+        self.execute_command("wget https://raw.githubusercontent.com/cdr/code-server/main/install.sh", self.cfg.source_directory)
         self.execute_command("bash install.sh", self.cfg.source_directory)
+        
         file_path = os.path.join(self.cfg.source_directory, 'config.yaml')
-        directory = os.path.dirname(file_path)
-        print(f'================================{directory}================================')
         def append_line_to_file(file_path, line, mode='w'):
             with open(file_path, mode, encoding='utf-8') as file:
                 file.write(line + '\n')
-
-        if not os.path.exists(directory):
-            os.makedirs(directory)
         
         append_line_to_file(file_path, f'bind-addr: 0.0.0.0:{self.port}')
         append_line_to_file(file_path, f'auth: none', 'a')
