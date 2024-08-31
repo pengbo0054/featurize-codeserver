@@ -164,6 +164,8 @@ class Vscode(App):
         def append_line_to_file(file_path, line, mode='a'):
             with open(file_path, mode, encoding='utf-8') as file:
                 file.write(line + '\n')
+        if not os.path.exists('/home/featurize/.config/code-server'):
+            self.execute_command("mkdir /home/featurize/.config/code-server")
 
         append_line_to_file('/home/featurize/.config/code-server/config.yaml', f'bind-addr: 0.0.0.0:{self.port}', 'w')
         append_line_to_file('/home/featurize/.config/code-server/config.yaml', f'auth: none')
