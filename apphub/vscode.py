@@ -100,47 +100,49 @@ class Vscode(App):
         # NOTE：所有命令，或是其他的根路径相关的参数等都建议使用绝对路径
         # TODO：在这里写安装逻辑，一般都会调用 execute_command 来执行
         # self.execute_command("{command to be executed}")
-        self.logger.info("version 1.0.4")
 
         self.cfg.source_directory = install_location
         
-        os.environ['STANDALONE_INSTALL_PREFIX'] = self.cfg.source_directory
-        os.environ['VERSION'] = '4.92.2'
-        self.execute_command("wget https://featurize-public.oss-cn-beijing.aliyuncs.com/install.sh", self.cfg.source_directory)
-        self.execute_command("bash install.sh", self.cfg.source_directory)
+        #os.environ['STANDALONE_INSTALL_PREFIX'] = self.cfg.source_directory
+        #os.environ['VERSION'] = '4.92.2'
+        #self.execute_command("wget https://featurize-public.oss-cn-beijing.aliyuncs.com/install.sh ｜ bash", self.cfg.source_directory)
+        #self.execute_command(f"bash install.sh", self.cfg.source_directory)
         
-        filepath = os.path.join(self.cfg.source_directory, 'config.yaml')
-        def append_line_to_file(file_path, line, mode='w'):
+        #filepath = os.path.join(self.cfg.source_directory, 'config.yaml')
+        #def append_line_to_file(file_path, line, mode='w'):
+        #    with open(file_path, mode, encoding='utf-8') as file:
+        #        file.write(line + '\n')
+        
+        #append_line_to_file(filepath, f'bind-addr: 0.0.0.0:{self.port}')
+        #append_line_to_file(filepath, f'auth: none', 'a')
+        #append_line_to_file(filepath, f'cert: false', 'a')
+        
+        #if os.path.exists('/home/featurize/.config/code-server/config.yaml'):
+        #    os.remove('/home/featurize/.config/code-server/config.yaml')
+
+        #shutil.copy(filepath, '/home/featurize/.config/code-server/config.yaml')
+        #self.execute_command("sudo rm /home/featurize/.config/code-server/config.yaml")
+        #self.execute_command('code-server --install-extension ms-python.python', daemon=False)
+        self.cfg.source_directory = install_location
+        self.execute_command(
+            f"curl -fOL https://github.com/coder/code-server/releases/download/v4.92.2/code-server_4.92.2_amd64.deb",
+            self.cfg.source_directory
+        )
+        
+        self.execute_command(
+            f"sudo dpkg -i code-server_4.92.2_amd64.deb",
+            self.cfg.source_directory
+        )
+        def append_line_to_file(file_path, line, mode='a'):
             with open(file_path, mode, encoding='utf-8') as file:
                 file.write(line + '\n')
         
-        append_line_to_file(filepath, f'bind-addr: 0.0.0.0:{self.port}')
-        append_line_to_file(filepath, f'auth: none', 'a')
-        append_line_to_file(filepath, f'cert: false', 'a')
+        if not os.path.exists('/home/featurize/.config/code-server'):
+            self.execute_command("mkdir /home/featurize/.config/code-server")
         
-        if os.path.exists('/home/featurize/.config/code-server/config.yaml'):
-            os.remove('/home/featurize/.config/code-server/config.yaml')
-
-        shutil.copy(filepath, '/home/featurize/.config/code-server/config.yaml')
-        #self.execute_command("sudo rm /home/featurize/.config/code-server/config.yaml")
-        self.execute_command('code-server --install-extension ms-python.python')
-        #self.cfg.source_directory = install_location
-        #self.execute_command(
-        #    f"curl -fOL https://github.com/coder/code-server/releases/download/v4.92.2/code-server_4.92.2_amd64.deb",
-        #    self.cfg.source_directory
-        #)
-        
-        #self.execute_command(
-        #    f"sudo dpkg -i code-server_4.92.2_amd64.deb",
-        #    self.cfg.source_directory
-        #)
-        #def append_line_to_file(file_path, line):
-        #    with open(file_path, 'a', encoding='utf-8') as file:
-        #        file.write(line + '\n')
-
-        #append_line_to_file('/home/featurize/.config/code-server/config.yaml', f'bind-addr: 0.0.0.0:{self.port}')
-        #append_line_to_file('/home/featurize/.config/code-server/config.yaml', f'auth: none')
-        #append_line_to_file('/home/featurize/.config/code-server/config.yaml', f'cert: false')
+        append_line_to_file('/home/featurize/.config/code-server/config.yaml', f'bind-addr: 0.0.0.0:{self.port}', 'w')
+        append_line_to_file('/home/featurize/.config/code-server/config.yaml', f'auth: none')
+        append_line_to_file('/home/featurize/.config/code-server/config.yaml', f'cert: false')
         
         self.save_app_config()
         # 调用 app_installed，标准流程，该函数会通知前端安装已经完成，切换到应用的页面
@@ -154,7 +156,18 @@ class Vscode(App):
         # 则在调用 execute_command 时候需要传入 daemon=True，否则命令会
         # 卡住不动，self.execute_command("uvicorn app:main", daemon=True)
         # TODO: 写应用启动的逻辑
-        #self.execute_command(f'code-server --auth none --bind-addr 0.0.0.0:{self.port} --cert false', daemon=True)
+        #self.execute_command(f'./code-server --auth none --bind-addr 0.0.0.0:{self.port} --cert false /home/featurize', os.path.join(self.cfg.source_directory, 'bin'), daemon=True)
+        self.execute_command(
+            f"sudo dpkg -i code-server_4.92.2_amd64.deb",
+            self.cfg.source_directory
+        )
+        def append_line_to_file(file_path, line, mode='a'):
+            with open(file_path, mode, encoding='utf-8') as file:
+                file.write(line + '\n')
+
+        append_line_to_file('/home/featurize/.config/code-server/config.yaml', f'bind-addr: 0.0.0.0:{self.port}', 'w')
+        append_line_to_file('/home/featurize/.config/code-server/config.yaml', f'auth: none')
+        append_line_to_file('/home/featurize/.config/code-server/config.yaml', f'cert: false')
         self.execute_command(
             f"sudo systemctl enable --now code-server@$USER",
             self.cfg.source_directory
