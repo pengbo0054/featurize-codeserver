@@ -174,6 +174,7 @@ class Vscode(App):
             f"sudo systemctl enable --now code-server@$USER",
             self.cfg.source_directory
         )
+        self.save_app_config()
         # 调用 app_started，标准流程，该函数会通知前端应用已经开始运行
         self.app_started()
 
