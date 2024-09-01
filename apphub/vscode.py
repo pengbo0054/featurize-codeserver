@@ -122,6 +122,8 @@ class Vscode(App):
         append_line_to_file('/home/featurize/.config/code-server/config.yaml', f'cert: false')
         append_line_to_file('/home/featurize/.config/code-server/config.yaml', f'extensions-dir: {self.cfg.source_directory}')
         
+        self.execute_command('code-server --install-extension ms-python.python')
+        
         self.save_app_config()
         # 调用 app_installed，标准流程，该函数会通知前端安装已经完成，切换到应用的页面
         self.app_installed()
